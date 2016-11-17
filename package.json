@@ -1,0 +1,27 @@
+{
+  "name": "blumjs",
+  "version": "0.0.1",
+  "description": "A UI Package for Angular2",
+  "main": "blumjs.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmazaheri/blumjs.git"
+  },
+  "keywords": [
+    "blum",
+    "angular2",
+    "ui"
+  ],
+  "author": "Behnam Mazaheri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmazaheri/blumjs/issues"
+  },
+  "homepage": "https://github.com/bmazaheri/blumjs#readme"
+}
