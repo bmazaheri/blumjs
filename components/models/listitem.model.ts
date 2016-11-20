@@ -1,4 +1,5 @@
-export class ListItem{
+export interface ListItem {
     label: string;
-    value: any = {};
+    value: any;
+    selected?: boolean;    
 }

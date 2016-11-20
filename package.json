@@ -1,6 +1,6 @@
 {
   "name": "blumjs",
-  "version": "0.0.1",
+  "version": "0.0.10",
   "description": "A UI Package for Angular2",
   "main": "blumjs.js",
   "directories": {
@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev": "tsc -w",
     "test": "test"
   },
   "repository": {

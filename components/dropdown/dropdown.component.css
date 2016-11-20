@@ -1,0 +1,35 @@
+.selectbox{
+    border: 1px solid gray;
+    display: inline-block;
+}
+
+.value-container{
+    width: 100%;
+    margin: auto;
+}
+
+.items-container{
+    width: 200px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    position: fixed;
+    z-index: 100;
+}
+
+.selectitem{
+    width: 100%;
+    padding: 3px;
+}
+
+.selectitem:hover{
+    background-color: gray;
+}
+
+.selectitem .selected{
+    background-color: lightblue;
+}
+
+.searcharea{
+    width: 95%;
+    margin: auto;
+}
