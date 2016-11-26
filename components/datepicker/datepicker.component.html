@@ -1,0 +1,15 @@
+<div class="datepicker" [style.width]="width + 'px'">
+    <button [hidden]="pickerOpen" class="picker-button" (click)="pickerClick()">{{model}}</button>
+    <div class="calendar-container" [hidden]="!pickerOpen">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th *ngFor="let cell of header.cells">{{cell.content}}</th>
+                </tr>
+            </thead>
+            <!--<tr *ngFor="let row of rows">
+                <td *ngFor="let cell of row.cells"></td>
+            </tr>-->
+        </table>
+    </div>
+</div>
