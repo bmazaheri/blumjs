@@ -1,15 +1,20 @@
 <div class="datepicker" [style.width]="width + 'px'">
     <button [hidden]="pickerOpen" class="picker-button" (click)="pickerClick()">{{model}}</button>
     <div class="calendar-container" [hidden]="!pickerOpen">
+        <div>
+        <button type="button" (click)="prevMonth()">Previous Month</button>
+        <button type="button" (click)="nextMonth()">Next Month</button>
+        </div>
+        <div>{{currentViewDate}}</div>
         <table border="1">
             <thead>
                 <tr>
                     <th *ngFor="let cell of header.cells">{{cell.content}}</th>
                 </tr>
             </thead>
-            <!--<tr *ngFor="let row of rows">
-                <td *ngFor="let cell of row.cells"></td>
-            </tr>-->
+            <tr *ngFor="let row of rows">
+                <td *ngFor="let cell of row.cells">{{cell.content}}</td>
+            </tr>
         </table>
     </div>
 </div>

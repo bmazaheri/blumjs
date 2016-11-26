@@ -1,4 +1,6 @@
 import { Component, Input, HostListener, ElementRef, Inject, OnChanges } from "@angular/core";
+import * as moment from "moment";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: 'bl-datepicker',
@@ -10,29 +12,57 @@ export class DatepickerComponent {
     @Input() width: number = 200;
     @Input() model: Date = new Date();
 
+    private selectedDate:Date;
+    private currentViewDate:Date;
     private pickerOpen: boolean = false;
     private rows: Row[];
     private header: Row;
     private _c: Convertor;
 
     constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
-        this.reset();
+        this.init();
     };
 
     ngOnChanges() {
-        this.reset();
+        this.init();
     }
 
-    reset() {
+    init() {
         this._c = new Convertor(this.calendar);
-        this.header = new Row();
-        for (let i = 0; i < 7; i++) {
-            this.header.cells[i] = new Cell;
-            let index = i + this._c.weekFirstDay;
-            index -= (i + this._c.weekFirstDay < 7) ? 0 : 7;
-            this.header.cells[i].content = this._c.weekDayNames[index];
+        this.selectedDate = this.model;
+        this.currentViewDate = this.model;
+        this.resetView();
+    }
+
+    resetView(){
+        this.header = this._c.weekHeaders();
+        let currentMonthLength = this._c.monthLength(this.currentViewDate);
+        let dayNumberofMonthFirst = this._c.dayNumberofMonthFirst(this.currentViewDate);
+        this.rows = new Array<Row>();
+        let cellIndex = 0;
+        for(let weekIndex=0;weekIndex<Math.ceil(currentMonthLength / 7);weekIndex++){
+            this.rows[weekIndex]=new Row();
+            for(let colIndex=0;colIndex<7;colIndex++){
+                this.rows[weekIndex].cells[colIndex]=new Cell();
+                if(weekIndex==0 && colIndex<dayNumberofMonthFirst){
+                    continue;
+                }
+                if(cellIndex<currentMonthLength){
+                this.rows[weekIndex].cells[colIndex].content=(cellIndex+1).toString();
+                }
+                cellIndex++;
+            }
         }
-        let currentMonthLength = this._c.monthLength();
+    }
+
+    nextMonth(){
+        this.currentViewDate=new Date(this.currentViewDate.getFullYear(), this.currentViewDate.getMonth()+1, this.currentViewDate.getDate());
+        this.resetView();
+    }
+
+    prevMonth(){
+        this.currentViewDate=new Date(this.currentViewDate.getFullYear(), this.currentViewDate.getMonth()-1, this.currentViewDate.getDate());
+        this.resetView();
     }
 
     pickerClick() {
@@ -68,9 +98,24 @@ class Convertor {
     public monthNames: string[];
     public weekFirstDay: number = 0;
 
-    // monthLength() {
-    //     return new Date(year, month, 0).getDate();
-    // }
+    monthLength(date:Date) {
+        return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
+    }
+
+    weekHeaders(){
+        let row=  new Row();
+        for (let i = 0; i < 7; i++) {
+            row.cells[i] = new Cell;
+            let index = i + this.weekFirstDay;
+            index -= (i + this.weekFirstDay < 7) ? 0 : 7;
+            row.cells[i].content = this.weekDayNames[index];
+        }
+        return row;
+    }
+
+    dayNumberofMonthFirst(date:Date):number{
+        return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    }
 
     constructor(calendar: string) {
         if (!calendar || (['gregorian', 'jalali'].indexOf(calendar) < 0)) {
@@ -78,7 +123,7 @@ class Convertor {
         }
         switch (calendar) {
             case 'gregorian': {
-                this.weekDayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                this.weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                 this.weekFirstDay = 0;
                 this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                 break;
