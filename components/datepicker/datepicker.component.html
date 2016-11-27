@@ -1,11 +1,10 @@
 <div class="datepicker" [style.width]="width + 'px'">
-    <button [hidden]="pickerOpen" class="picker-button" (click)="pickerClick()">{{model}}</button>
+    <button [hidden]="pickerOpen" class="picker-button" (click)="pickerClick()">{{model | dateToString:"yyyy/MM/dd":_c}}</button>
     <div class="calendar-container" [hidden]="!pickerOpen">
         <div>
-        <button type="button" (click)="prevMonth()">Previous Month</button>
-        <button type="button" (click)="nextMonth()">Next Month</button>
+            <button type="button" (click)="prevMonth()"><</button> {{currentViewDate.month | nameOfMonth:_c}}
+            <button type="button" (click)="nextMonth()">></button>
         </div>
-        <div>{{currentViewDate}}</div>
         <table border="1">
             <thead>
                 <tr>
@@ -13,8 +12,13 @@
                 </tr>
             </thead>
             <tr *ngFor="let row of rows">
-                <td *ngFor="let cell of row.cells">{{cell.content}}</td>
+                <td *ngFor="let cell of row.cells">
+                    <button (click)="setDate(cell)" *ngIf="cell.content" style="width:100%">{{cell.content}}</button>
+                </td>
             </tr>
         </table>
+        {{selectedDate.year}}/{{selectedDate.month}}/{{selectedDate.day}}
+        <button (click)="confirm()">Ok</button>
+        <button (click)="cancel()">Cancel</button>
     </div>
 </div>

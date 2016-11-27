@@ -1,23 +1,28 @@
-import { Component, Input, HostListener, ElementRef, Inject, OnChanges } from "@angular/core";
-import * as moment from "moment";
-import { DatePipe } from "@angular/common";
+import { Component, Input, Output, EventEmitter, HostListener, ElementRef, Inject, OnChanges } from "@angular/core";
+import { DateUnit } from "./dateunit";
+import { CalendarBase, Calendar } from "./calendarbase";
+import { Gregorian } from "./calendars/gregorian";
+import { Row, Cell } from "./elements";
+import { DateToStringPipe, NameOfMonthPipe } from "./pipes";
 
 @Component({
     selector: 'bl-datepicker',
     templateUrl: './datepicker.component.html',
-    styleUrls: ['./datepicker.component.css']
+    styleUrls: ['./datepicker.component.css'],
+    providers: [DateToStringPipe, NameOfMonthPipe]
 })
 export class DatepickerComponent {
     @Input() calendar: string;
     @Input() width: number = 200;
-    @Input() model: Date = new Date();
+    @Output() modelChange: EventEmitter<Date> = new EventEmitter<Date>();
+    @Input() model:Date;
 
-    private selectedDate:Date;
-    private currentViewDate:Date;
+    private selectedDate: DateUnit;
+    private currentViewDate: DateUnit;
     private pickerOpen: boolean = false;
     private rows: Row[];
     private header: Row;
-    private _c: Convertor;
+    private _c: Calendar<CalendarBase>;
 
     constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
         this.init();
@@ -28,46 +33,69 @@ export class DatepickerComponent {
     }
 
     init() {
-        this._c = new Convertor(this.calendar);
-        this.selectedDate = this.model;
-        this.currentViewDate = this.model;
+        if(!this.model){
+            return;
+        }
+        if (this.calendar == 'jalali') {
+            this._c = new Calendar<Gregorian>(Gregorian);
+        } else {
+            this._c = new Calendar<Gregorian>(Gregorian);
+        }
+        this.selectedDate = this._c._calendar.dateToDateUnit(this.model);
+        this.currentViewDate = this._c._calendar.dateToDateUnit(this.model);
         this.resetView();
     }
 
-    resetView(){
+    resetView() {
         this.header = this._c.weekHeaders();
         let currentMonthLength = this._c.monthLength(this.currentViewDate);
         let dayNumberofMonthFirst = this._c.dayNumberofMonthFirst(this.currentViewDate);
         this.rows = new Array<Row>();
         let cellIndex = 0;
-        for(let weekIndex=0;weekIndex<Math.ceil(currentMonthLength / 7);weekIndex++){
-            this.rows[weekIndex]=new Row();
-            for(let colIndex=0;colIndex<7;colIndex++){
-                this.rows[weekIndex].cells[colIndex]=new Cell();
-                if(weekIndex==0 && colIndex<dayNumberofMonthFirst){
+        for (let weekIndex = 0; weekIndex < Math.ceil(currentMonthLength / 7); weekIndex++) {
+            this.rows[weekIndex] = new Row();
+            for (let colIndex = 0; colIndex < 7; colIndex++) {
+                this.rows[weekIndex].cells[colIndex] = new Cell();
+                if (weekIndex == 0 && colIndex < dayNumberofMonthFirst) {
                     continue;
                 }
-                if(cellIndex<currentMonthLength){
-                this.rows[weekIndex].cells[colIndex].content=(cellIndex+1).toString();
+                if (cellIndex < currentMonthLength) {
+                    this.rows[weekIndex].cells[colIndex].content = (cellIndex + 1).toString();
                 }
                 cellIndex++;
             }
         }
     }
 
-    nextMonth(){
-        this.currentViewDate=new Date(this.currentViewDate.getFullYear(), this.currentViewDate.getMonth()+1, this.currentViewDate.getDate());
+    private setDate(cell: Cell) {
+        this.selectedDate.year = this.currentViewDate.year;
+        this.selectedDate.month = this.currentViewDate.month;
+        this.selectedDate.day = +cell.content;
+    }
+
+    private confirm() {
+        this.model = this._c._calendar.dateUnitToDate(this.selectedDate);
+        this.modelChange.emit(this.model);
+        this.pickerOpen = false;
+    }
+
+    private nextMonth() {
+        this.currentViewDate.addMonth();
         this.resetView();
     }
 
-    prevMonth(){
-        this.currentViewDate=new Date(this.currentViewDate.getFullYear(), this.currentViewDate.getMonth()-1, this.currentViewDate.getDate());
+    private prevMonth() {
+        this.currentViewDate.subMonth();
         this.resetView();
     }
 
-    pickerClick() {
+    private pickerClick() {
         this.pickerOpen = true;
     };
+
+    private cancel() {
+        this.pickerOpen = false;
+    }
 
     @HostListener('document:click', ['$event', '$event.target'])
     public onClick(event: MouseEvent, targetElement: HTMLElement): void {
@@ -75,66 +103,8 @@ export class DatepickerComponent {
             return;
         }
         if (!this._elementRef.nativeElement.contains(targetElement)) {
-            this.pickerOpen = false;
+            this.cancel();
         }
     };
 
 };
-
-class Row {
-    public cells: Cell[];
-
-    constructor() {
-        this.cells = new Array<Cell>(7);
-    }
-};
-
-class Cell {
-    content: string;
-}
-
-class Convertor {
-    public weekDayNames: string[];
-    public monthNames: string[];
-    public weekFirstDay: number = 0;
-
-    monthLength(date:Date) {
-        return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
-    }
-
-    weekHeaders(){
-        let row=  new Row();
-        for (let i = 0; i < 7; i++) {
-            row.cells[i] = new Cell;
-            let index = i + this.weekFirstDay;
-            index -= (i + this.weekFirstDay < 7) ? 0 : 7;
-            row.cells[i].content = this.weekDayNames[index];
-        }
-        return row;
-    }
-
-    dayNumberofMonthFirst(date:Date):number{
-        return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-    }
-
-    constructor(calendar: string) {
-        if (!calendar || (['gregorian', 'jalali'].indexOf(calendar) < 0)) {
-            calendar = 'gregorian';
-        }
-        switch (calendar) {
-            case 'gregorian': {
-                this.weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                this.weekFirstDay = 0;
-                this.monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                break;
-            }
-            case 'jalali': {
-                this.weekDayNames = ['دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه', 'یکشنبه'];
-                this.weekFirstDay = 5;
-                this.monthNames = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-                break;
-            }
-        }
-    }
-
-}
