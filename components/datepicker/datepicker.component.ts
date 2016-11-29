@@ -1,10 +1,20 @@
-import { Component, Input, Output, EventEmitter, HostListener, ElementRef, Inject, OnChanges } from "@angular/core";
-import { DateUnit } from "./dateunit";
-import { CalendarBase, Calendar } from "./calendarbase";
-import { Gregorian } from "./calendars/gregorian";
-import { Jalali } from "./calendars/jalali";
-import { Row, Cell } from "./elements";
-import { DateToStringPipe, NameOfMonthPipe } from "./pipes";
+import {
+    Component,
+    Input,
+    Output,
+    EventEmitter,
+    HostListener,
+    ElementRef,
+    Inject,
+    OnChanges,
+    SimpleChanges
+} from "@angular/core";
+import {DateUnit} from "./dateunit";
+import {CalendarBase, Calendar} from "./calendarbase";
+import {Gregorian} from "./calendars/gregorian";
+import {Jalali} from "./calendars/jalali";
+import {Row, Cell} from "./elements";
+import {DateToStringPipe, NameOfMonthPipe} from "./pipes";
 
 @Component({
     selector: 'bl-datepicker',
@@ -12,11 +22,11 @@ import { DateToStringPipe, NameOfMonthPipe } from "./pipes";
     styleUrls: ['./datepicker.component.css'],
     providers: [DateToStringPipe, NameOfMonthPipe]
 })
-export class DatepickerComponent {
+export class DatepickerComponent implements OnChanges {
     @Input() calendar: string;
     @Input() width: number = 200;
     @Output() modelChange: EventEmitter<Date> = new EventEmitter<Date>();
-    @Input() model:Date;
+    @Input() model: Date;
 
     private selectedDate: DateUnit;
     private currentViewDate: DateUnit;
@@ -25,16 +35,16 @@ export class DatepickerComponent {
     private header: Row;
     private _c: Calendar<CalendarBase>;
 
-    constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
+    constructor(@Inject(ElementRef) private _elementRef: ElementRef) {
         this.init();
     };
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges): void {
         this.init();
     }
 
     init() {
-        if(!this.model){
+        if (!this.model) {
             return;
         }
         if (this.calendar && this.calendar.toLowerCase() == 'jalali') {
@@ -115,4 +125,5 @@ export class DatepickerComponent {
         }
     };
 
-};
+}
+;

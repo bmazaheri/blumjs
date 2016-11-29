@@ -9,7 +9,7 @@ export interface CalendarBase {
     maxYear: number;
     monthLength(date: DateUnit): number;
     weekHeaders(): Row;
-    dayNumberofMonthFirst(date: DateUnit): number;
+    dayNumberOfMonthFirst(date: DateUnit): number;
     dateToDateUnit(date: Date): DateUnit;
     dateToString(date: Date, format: string): string;
     dateUnitToDate(date:DateUnit):Date;
@@ -40,7 +40,7 @@ export class Calendar<TCal extends CalendarBase> {
     }
 
     dayNumberofMonthFirst(date: DateUnit): number {
-        return this._calendar.dayNumberofMonthFirst(date);
+        return this._calendar.dayNumberOfMonthFirst(date);
     }
 
 }

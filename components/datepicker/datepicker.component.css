@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+.datepicker {
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+
+.calendar-container:before {
+
+}
+
+.calendar-container {
+    width: 250px;
+    padding: 10px;
+    margin: 5px;
+    background-color: white;
+    border: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+    position: absolute;
+    z-index: 9999;
+}
+
+.calendar-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.calendar-title > .current-date {
+    font-size: 1.1em;
+    line-height: 2em;
+}
+
+.calendar-title > .current-date > .year {
+    color: #3EC267;
+}
+
+.calendar-title > .navigation-arrow:hover {
+    cursor: pointer;
+}
+
+.calendar-title > .navigation-arrow {
+    color: grey;
+    font-size: 2em;
+}
+
+.calendar-title > .navigation-arrow.left {
+    float: left;
+}
+
+.calendar-title > .navigation-arrow.right {
+    float: right;
+}
+
+.calendar-container > table {
+    table-layout: fixed;
+    text-align: center;
+    vertical-align: middle;
+    width: 98%;
+    font-size: 0.5vw;
+}
+
+.calendar-container > table > tbody > tr > td, .calendar-container > table > thead > tr > th {
+    width: 14%;
+    position: relative;
+    margin: 10px;
+}
+
+.calendar-container > table > tbody > tr > td:after {
+    content: '';
+    display: block;
+    margin-top: 100%;
+}
+
+.calendar-container > table > tbody > tr > td > a {
+    position: absolute;
+    top: 50%;
+    line-height: 50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.calendar-container > table > thead {
+    font-weight: bold;
+}
+
+.calendar-container > table > tbody {
+    font-size: 2em;
+}
+
+.calendar-container > table > tbody > tr > td.selected {
+    background-color: #3EC267;
+    color: white;
+    border-radius: 100%;
+}
+
+.calendar-container > table > tbody > tr > td.not-empty:hover {
+    cursor: pointer;
+    border: 1px solid #3EC267;
+    border-radius: 100%;
+}

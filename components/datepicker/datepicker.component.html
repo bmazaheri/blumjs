@@ -1,22 +1,43 @@
 <div class="datepicker" [style.width]="width + 'px'">
-    <button [hidden]="pickerOpen" class="picker-button" (click)="pickerClick()">{{model | dateToString:"yyyy/MM/dd":_c}}</button>
+    <div class="datepicker-input">
+        <input type="text" [value]="model | dateToString:'yyyy/MM/dd':_c">
+        <button class="picker-button" (click)="pickerClick()">
+            &#128197;
+        </button>
+    </div>
+
     <div class="calendar-container" [hidden]="!pickerOpen">
-        <div style="width:200px;">
-            <input type="number" [(ngModel)]="currentViewDate.year" (change)="resetView()" min="{{_c._calendar.minYear}}" max="{{_c._calendar.maxYear}}" style="width:50px;">
-            <button type="button" (click)="prevMonth()"><</button> {{currentViewDate.month | nameOfMonth:_c}}
-            <button type="button" (click)="nextMonth()">></button>
+        <div class="calendar-title">
+            <!--<input type="number" [(ngModel)]="currentViewDate.year" (change)="resetView()" min="{{_c._calendar.minYear}}" max="{{_c._calendar.maxYear}}">-->
+            <a type="button" class="navigation-arrow left" (click)="prevMonth()"><</a>
+            <span class="current-date">
+                {{currentViewDate.month | nameOfMonth:_c}}
+                <span class="year">
+                    {{currentViewDate.year}}
+                </span>
+            </span>
+            <a type="button" class="navigation-arrow right" (click)="nextMonth()">></a>
         </div>
-        <table border="1">
+        <table>
             <thead>
-                <tr>
-                    <th *ngFor="let cell of header.cells">{{cell.content}}</th>
-                </tr>
+            <tr>
+                <th *ngFor="let cell of header.cells">{{cell.content}}</th>
+            </tr>
             </thead>
+            <tbody>
             <tr *ngFor="let row of rows">
-                <td *ngFor="let cell of row.cells">
-                    <button (click)="setDate(cell)" *ngIf="cell.content" style="width:100%">{{cell.content}}</button>
+                <td *ngFor="let cell of row.cells"
+                    [ngClass]="{'selected': selectedDate.day == cell.content &&
+                                selectedDate.year == currentViewDate.year &&
+                                selectedDate.month == currentViewDate.month,
+                                'not-empty': cell.content}"
+                    (click)="setDate(cell)"
+
+                >
+                    <a *ngIf="cell.content">{{cell.content}}</a>
                 </td>
             </tr>
+            </tbody>
         </table>
         {{selectedDate.year}}/{{selectedDate.month}}/{{selectedDate.day}}
         <button (click)="confirm()">Ok</button>

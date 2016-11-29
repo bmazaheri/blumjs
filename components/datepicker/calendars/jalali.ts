@@ -48,7 +48,7 @@ export class Jalali implements CalendarBase {
         return row;
     }
 
-    dayNumberofMonthFirst(date: DateUnit): number {
+    dayNumberOfMonthFirst(date: DateUnit): number {
         return new Date(date.year, date.month, 1).getDay();
     }
 }
