@@ -63,7 +63,7 @@ export class DatepickerComponent implements OnChanges {
         let dayNumberofMonthFirst = this._c.dayNumberofMonthFirst(this.currentViewDate);
         this.rows = new Array<Row>();
         let cellIndex = 0;
-        for (let weekIndex = 0; weekIndex < Math.ceil(currentMonthLength / 7); weekIndex++) {
+        for (let weekIndex = 0; weekIndex < Math.ceil((currentMonthLength + dayNumberofMonthFirst) / 7); weekIndex++) {
             this.rows[weekIndex] = new Row();
             for (let colIndex = 0; colIndex < 7; colIndex++) {
                 this.rows[weekIndex].cells[colIndex] = new Cell();
