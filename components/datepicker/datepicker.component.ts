@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, HostListener, ElementRef, Injec
 import { DateUnit } from "./dateunit";
 import { CalendarBase, Calendar } from "./calendarbase";
 import { Gregorian } from "./calendars/gregorian";
+import { Jalali } from "./calendars/jalali";
 import { Row, Cell } from "./elements";
 import { DateToStringPipe, NameOfMonthPipe } from "./pipes";
 
@@ -36,8 +37,8 @@ export class DatepickerComponent {
         if(!this.model){
             return;
         }
-        if (this.calendar == 'jalali') {
-            this._c = new Calendar<Gregorian>(Gregorian);
+        if (this.calendar && this.calendar.toLowerCase() == 'jalali') {
+            this._c = new Calendar<Jalali>(Jalali);
         } else {
             this._c = new Calendar<Gregorian>(Gregorian);
         }
@@ -79,6 +80,12 @@ export class DatepickerComponent {
         this.pickerOpen = false;
     }
 
+    private today() {
+        this.model = new Date();
+        this.modelChange.emit(this.model);
+        this.pickerOpen = false;
+    }
+
     private nextMonth() {
         this.currentViewDate.addMonth();
         this.resetView();
@@ -91,6 +98,7 @@ export class DatepickerComponent {
 
     private pickerClick() {
         this.pickerOpen = true;
+        this.init();
     };
 
     private cancel() {

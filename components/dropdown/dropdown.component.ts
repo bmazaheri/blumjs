@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, Inject, HostListener } from "@angular/core";
+import { Component, Input, ElementRef, Inject, HostListener, OnChanges } from "@angular/core";
 import { ListItem } from "../models/listitem.model";
 
 @Component({
@@ -6,8 +6,8 @@ import { ListItem } from "../models/listitem.model";
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.css']
 })
-export class DropdownComponent {
-    @Input() items: ListItem[] = [];
+export class DropdownComponent implements OnChanges {
+    @Input() items: ListItem[];
     @Input() width: number = 200;
     @Input() search: boolean = true;
 
@@ -16,8 +16,18 @@ export class DropdownComponent {
     private listOpen: boolean = false;
 
     constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
-        this.items = [{ label: "a", value: { id: 1 } }, { label: "b", value: { id: 2 } },{ label: "ab", value: { id: 3 } },{ label: "aa", value: { id: 4 } },{ label: "abc", value: { id: 5 } }];
-        this.selectedItem = this.items[0];
+        this.init();        
+    }
+
+    ngOnChanges() {
+        this.init();
+    }
+
+    init() {
+        if (!this.items) {
+            this.items = [];
+        }
+        this.selectedItem = this.items.length>0? this.items[0]: <ListItem>{};
     }
 
     itemClick(event: Event, item: ListItem) {

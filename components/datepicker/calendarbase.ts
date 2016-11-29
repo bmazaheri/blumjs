@@ -5,6 +5,8 @@ export interface CalendarBase {
     weekDayNames: string[];
     monthNames: string[];
     weekFirstDay: number;
+    minYear: number;
+    maxYear: number;
     monthLength(date: DateUnit): number;
     weekHeaders(): Row;
     dayNumberofMonthFirst(date: DateUnit): number;

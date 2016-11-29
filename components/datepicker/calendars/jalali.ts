@@ -3,19 +3,19 @@ import { Calendar, CalendarBase } from "../calendarbase"
 import { DateUnit } from "../dateunit";
 import { Row, Cell } from "../elements";
 
-export class Gregorian implements CalendarBase {
-    weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    weekFirstDay = 0;
-    monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    minYear = 1970;
-    maxYear = 2070;
+export class Jalali implements CalendarBase {
+    weekDayNames = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+    weekFirstDay = 6;
+    monthNames = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'ابان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+    minYear = 1350;
+    maxYear = 1450;
 
     nameOfMonth(num: number): string{
         return this.monthNames[num];
     }
 
     dateToString(date: Date, format: string): string {
-        return new DatePipe('en-en').transform(date, format);
+        return new DatePipe('fa-fa').transform(date, format);
     }
 
     dateToDateUnit(date: Date): DateUnit {

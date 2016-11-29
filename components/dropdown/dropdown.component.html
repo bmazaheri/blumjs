@@ -1,6 +1,6 @@
 <div class="selectbox" [style.width]="width + 'px'">
     <button [hidden]="listOpen" class="value-container" (click)="boxClick()">{{selectedItem.label}}</button>
-    <div class="items-container" [hidden]="!listOpen">
+    <div class="items-container" [hidden]="!listOpen" *ngIf="items.length>0">
         <input type="text" [hidden]="!search" class="searcharea"/>
         <div *ngFor="let item of items" class="selectitem" (click)="itemClick($event, item)">{{item.label}}</div>
     </div>
