@@ -1,5 +1,5 @@
-import { Component, Input, ElementRef, Inject, HostListener, OnChanges } from "@angular/core";
-import { ListItem } from "../models/listitem.model";
+import {Component, Input, ElementRef, Inject, HostListener, OnChanges, Output, EventEmitter} from "@angular/core";
+import {ListItem} from "../models/listitem.model";
 
 @Component({
     selector: 'bl-dropdown',
@@ -8,15 +8,17 @@ import { ListItem } from "../models/listitem.model";
 })
 export class DropdownComponent implements OnChanges {
     @Input() items: ListItem[];
-    @Input() width: number = 200;
-    @Input() search: boolean = true;
+    @Input() searchable: boolean = true;
 
+    @Input() selection: ListItem;
+    @Output() selectionChange: EventEmitter<ListItem> = new EventEmitter<ListItem>();
 
-    private selectedItem: ListItem;
     private listOpen: boolean = false;
 
-    constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
-        this.init();        
+    private suggestions: ListItem[];
+
+    constructor(@Inject(ElementRef) private _elementRef: ElementRef) {
+        this.init();
     }
 
     ngOnChanges() {
@@ -27,22 +29,40 @@ export class DropdownComponent implements OnChanges {
         if (!this.items) {
             this.items = [];
         }
-        this.selectedItem = this.items.length>0? this.items[0]: <ListItem>{};
+        this.selection = this.items.length > 0 ? this.items[0] : <ListItem>{};
+        this.suggestions = this.items;
     }
 
-    itemClick(event: Event, item: ListItem) {
-        this.selectedItem = item;
+    onItemSelect(event: Event, item: ListItem) {
+        this.selection = item;
+        this.selectionChange.emit(item);
         this.listOpen = false;
     }
 
-    boxClick() {
+    onDropdownClick() {
         this.listOpen = true;
-        console.log(this._elementRef);
+    }
+
+    searchTerm(term: string) {
+        if (term === '') {
+            this.suggestions = this.items;
+            return;
+        }
+
+        this.suggestions = [];
+
+        for (let item of this.items) {
+            if (item.label.toLowerCase().indexOf(term.toLowerCase()) > -1) {
+                this.suggestions.push(item);
+            }
+        }
     }
 
     @HostListener('document:click', ['$event', '$event.target'])
     public onClick(event: MouseEvent, targetElement: HTMLElement): void {
-        if (!targetElement) {
+        if (!
+                targetElement
+        ) {
             return;
         }
         if (!this._elementRef.nativeElement.contains(targetElement)) {

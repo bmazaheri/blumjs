@@ -5,10 +5,6 @@
     box-sizing: border-box;
 }
 
-.calendar-container:before {
-
-}
-
 .calendar-container {
     width: 250px;
     padding: 10px;
