@@ -39,8 +39,8 @@ export class DropdownComponent implements OnChanges {
         this.listOpen = false;
     }
 
-    onDropdownClick() {
-        this.listOpen = true;
+    toggleDropdownClick() {
+        this.listOpen = !this.listOpen;
     }
 
     searchTerm(term: string) {

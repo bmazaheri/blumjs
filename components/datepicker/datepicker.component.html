@@ -2,21 +2,25 @@
     <div class="datepicker-input">
         <input type="text" [value]="model | dateToString:'yyyy/MM/dd':_c">
         <button class="picker-button" (click)="pickerClick()">
-            &#128197;
+            <i class="fa fa-calendar" aria-hidden="true"></i>
         </button>
     </div>
 
     <div class="calendar-container" [hidden]="!pickerOpen">
         <div class="calendar-title">
             <!--<input type="number" [(ngModel)]="currentViewDate.year" (change)="resetView()" min="{{_c._calendar.minYear}}" max="{{_c._calendar.maxYear}}">-->
-            <a type="button" class="navigation-arrow left" (click)="prevMonth()"><</a>
+            <a type="button" class="navigation-arrow left" (click)="prevMonth()">
+                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            </a>
             <span class="current-date">
                 {{currentViewDate.month | nameOfMonth:_c}}
                 <span class="year">
                     {{currentViewDate.year}}
                 </span>
             </span>
-            <a type="button" class="navigation-arrow right" (click)="nextMonth()">></a>
+            <a type="button" class="navigation-arrow right" (click)="nextMonth()">
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </a>
         </div>
         <table>
             <thead>

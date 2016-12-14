@@ -1,6 +1,7 @@
 <div class="bl-dropdown">
-    <button class="selection-btn" (click)="onDropdownClick()">
+    <button class="selection-btn" (click)="toggleDropdownClick()">
         {{selection.label}}
+        <i style="float: right" class="fa" [ngClass]="listOpen ? 'fa-chevron-up': 'fa-chevron-down'" aria-hidden="true"></i>
     </button>
 
     <div class="selection-panel" [hidden]="!listOpen" *ngIf="items.length>0">
