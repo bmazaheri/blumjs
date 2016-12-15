@@ -1,6 +1,6 @@
 {
   "name": "blumjs",
-  "version": "0.0.10",
+  "version": "0.0.16",
   "description": "A UI Package for Angular2",
   "main": "blumjs.js",
   "directories": {
