@@ -1,8 +1,10 @@
 {
   "name": "blumjs",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "A UI Package for Angular2",
-  "main": "blumjs.js",
+  "main": "index.js",
+  "module": "index.js",
+  "typings": "index.d.ts",
   "directories": {
     "test": "test"
   },
