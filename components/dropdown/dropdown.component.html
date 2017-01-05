@@ -1,20 +1,16 @@
 <div class="bl-dropdown">
-    <button class="selection-btn" (click)="toggleDropdownClick()">
+    <button class="selection-btn" (click)="toggleDropdownClick()" [disabled]="disabled" [ngClass]="{'rtlized':dir=='rtl'}">
         {{selection.label}}
         <i style="float: right" class="fa" [ngClass]="listOpen ? 'fa-chevron-up': 'fa-chevron-down'" aria-hidden="true"></i>
-    </button>
+</button>
 
-    <div class="selection-panel" [hidden]="!listOpen" *ngIf="items.length>0">
-        <input class="search" #term (keyup)="searchTerm(term.value)" type="text" [hidden]="!searchable"/>
+<div class="selection-panel" [hidden]="!listOpen" *ngIf="items.length>0">
+    <input class="search" #term (keyup)="searchTerm(term.value)" type="text" [hidden]="!searchable" />
 
-        <div class="item-list">
-            <div class="item"
-                 *ngFor="let item of suggestions"
-                 (click)="onItemSelect($event, item)"
-                 [ngClass]="{'selected': selection===item}"
-            >
-                {{item.label}}
-            </div>
+    <div class="item-list">
+        <div class="item" *ngFor="let item of suggestions" (click)="onItemSelect($event, item)" [ngClass]="{'selected': selection===item}">
+            {{item.label}}
         </div>
     </div>
+</div>
 </div>

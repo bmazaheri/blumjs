@@ -1,1 +1,1 @@
-export {LoaderDirective} from "./loader.directive";
+export * from "./loader.directive";

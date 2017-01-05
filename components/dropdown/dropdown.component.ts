@@ -1,5 +1,5 @@
-import {Component, Input, ElementRef, Inject, HostListener, OnChanges, Output, EventEmitter} from "@angular/core";
-import {ListItem} from "../models/listitem.model";
+import { Component, Input, ElementRef, Inject, HostListener, OnChanges, Output, EventEmitter, ViewChild } from "@angular/core";
+import { ListItem } from "../models/listitem.model";
 
 @Component({
     selector: 'bl-dropdown',
@@ -9,15 +9,18 @@ import {ListItem} from "../models/listitem.model";
 export class DropdownComponent implements OnChanges {
     @Input() items: ListItem[];
     @Input() searchable: boolean = true;
-
+    @Input() disabled: boolean = false;
     @Input() selection: ListItem;
+    @Input() dir: string = 'ltr';
     @Output() selectionChange: EventEmitter<ListItem> = new EventEmitter<ListItem>();
+
+    @ViewChild('term') searchTermElement: ElementRef;
 
     private listOpen: boolean = false;
 
     private suggestions: ListItem[];
 
-    constructor(@Inject(ElementRef) private _elementRef: ElementRef) {
+    constructor( @Inject(ElementRef) private _elementRef: ElementRef) {
         this.init();
     }
 
@@ -26,6 +29,9 @@ export class DropdownComponent implements OnChanges {
     }
 
     init() {
+        if (this.dir != 'rtl') {
+            this.dir = 'ltr';
+        }
         if (!this.items) {
             this.items = [];
         }
@@ -41,6 +47,8 @@ export class DropdownComponent implements OnChanges {
 
     toggleDropdownClick() {
         this.listOpen = !this.listOpen;
+        this.searchTermElement.nativeElement.value = '';
+        this.suggestions = this.items;
     }
 
     searchTerm(term: string) {
@@ -61,7 +69,7 @@ export class DropdownComponent implements OnChanges {
     @HostListener('document:click', ['$event', '$event.target'])
     public onClick(event: MouseEvent, targetElement: HTMLElement): void {
         if (!
-                targetElement
+            targetElement
         ) {
             return;
         }

@@ -1,2 +1,2 @@
-export {DatepickerComponent} from "./datepicker.component";
-import {DateToStringPipe, NameOfMonthPipe} from "./pipes";
+export * from "./datepicker.component";
+import * from "./pipes";

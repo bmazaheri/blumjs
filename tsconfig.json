@@ -15,6 +15,8 @@
     "node_modules", "bundles", "dist"
   ],
   "files": [
-    "./blumjs.ts"
+    "./blumjs.ts",
+    "./components/dropdown/dropdown.module.ts",
+    "./components/datepicker/datepicker.module.ts"
   ]
 }
